@@ -15,6 +15,18 @@ import java.util.stream.Collectors;
  * 31.05.2015.
  */
 public class UserMealsUtil {
+
+    static private Map<Integer,UserMeal> cache = new HashMap<>();
+
+    static{
+        addMeal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500);
+        addMeal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000);
+        addMeal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500);
+        addMeal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000);
+        addMeal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500);
+        addMeal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510);
+    }
+
     public static void main(String[] args) {
         List<UserMeal> mealList = Arrays.asList(
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
@@ -59,6 +71,39 @@ public class UserMealsUtil {
     }
 
     public static UserMealWithExceed createWithExceed(UserMeal um, boolean exceeded) {
-        return new UserMealWithExceed(um.getDateTime(), um.getDescription(), um.getCalories(), exceeded);
+        return new UserMealWithExceed(um.getDateTime(), um.getDescription(), um.getCalories(), exceeded, um.getId());
     }
+
+    /**
+     * Bolshakov-as
+     */
+    public static void addMeal(LocalDateTime dateTime, String description, int calories){
+        UserMeal newMeal = new UserMeal(dateTime, description, calories);
+        cache.put(newMeal.getId(), newMeal);
+    }
+
+    public static void deleteMeal(int id){
+        if(cache.containsKey(id)) cache.remove(id);
+    }
+
+    public static List<UserMealWithExceed> getMeals(){
+        return getMealsWithExceeded(cache.values().stream().collect(Collectors.toList()), 2000);
+    }
+
+    private static List<UserMealWithExceed> getMealsWithExceeded(List<UserMeal> mealList, int caloriesPerDay) {
+        Map<LocalDate, Integer> caloriesSumByDate = mealList.stream()
+                .collect(
+                        Collectors.groupingBy(um -> um.getDateTime().toLocalDate(),
+                                Collectors.summingInt(UserMeal::getCalories))
+                );
+
+        return mealList.stream()
+                .map(um -> createWithExceed(um, caloriesSumByDate.get(um.getDateTime().toLocalDate()) > caloriesPerDay))
+                .collect(Collectors.toList());
+    }
+
+    public static UserMeal getMealById(int id){
+        return cache.get(id);
+    }
+
 }
