@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web;
 
+import org.slf4j.Logger;
 import ru.javawebinar.topjava.util.UserMealsUtil;
 
 import javax.servlet.ServletException;
@@ -8,11 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * Created by bolshakov-as on 04.03.2016.
  */
 
 public class MealServlet extends HttpServlet {
+
+    private static final Logger LOG = getLogger(UserServlet.class);
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -33,9 +39,29 @@ public class MealServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String action = request.getParameter("action");
+
+        if(action == null){
+        }
+        else if(action.equals("edit")){
+            LOG.debug("Edit");
+        }
+        else if(action.equals("delete")){
+            LOG.debug("Delete");
+        }
+        else if(action.equals("add")){
+            LOG.debug("ADD");
+        }
+
         request.setAttribute("mealList", UserMealsUtil.getMeals());
         request.getRequestDispatcher("/mealList.jsp").forward(request, response);
-        //response.sendRedirect("mealList.jsp");
+
     }
+
+    private int getId(HttpServletRequest request){
+        return Integer.parseInt(request.getParameter("id"));
+    }
+
 
 }

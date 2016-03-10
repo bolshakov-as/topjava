@@ -27,6 +27,7 @@
         <td>Description</td>
         <td>Calories</td>
         <td></td>
+        <td></td>
     </tr>
     </thead>
     <c:forEach items="${mealList}" var="meal">
@@ -38,15 +39,22 @@
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
             <td>
-                <form method="post" action="meals">
-                    <input type="hidden" name="id" value="${meal.getId()}" />
-                    <input type="submit" name="but" value="Delete">
-                    <input type="submit" name="but" value="Edit">
-                </form>
+                <a href="meals?action=delete&id=${meal.id}">Delete</a>
+            </td>
+            <td>
+                <a href="meals?action=edit&id=${meal.id}">Edit</a>
             </td>
         </tr>
     </c:forEach>
+    <tr>
+        <td><a href="meals?action=add">+ ADD</a></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
 </table>
+
 
 </body>
 </html>
