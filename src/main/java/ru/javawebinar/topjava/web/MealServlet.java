@@ -38,6 +38,4 @@ public class MealServlet extends HttpServlet {
         //response.sendRedirect("mealList.jsp");
     }
 
-
-
 }
