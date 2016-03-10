@@ -18,7 +18,7 @@ public class MealServlet extends HttpServlet {
 
         if(request.getParameterValues("but").length > 0 && request.getParameterValues("but")[0].equals("Delete")){
             UserMealsUtil.deleteMeal(Integer.parseInt(request.getParameter("id")));
-            request.setAttribute("meals", UserMealsUtil.getMeals());
+            request.setAttribute("mealList", UserMealsUtil.getMeals());
             request.getRequestDispatcher("/mealList.jsp").forward(request, response);
         }
         else if(request.getParameterValues("but").length > 0 && request.getParameterValues("but")[0].equals("Edit")){
@@ -26,14 +26,14 @@ public class MealServlet extends HttpServlet {
             request.getRequestDispatcher("/mealEdit.jsp").forward(request, response);
         }
         else{
-            request.setAttribute("meals", UserMealsUtil.getMeals());
+            request.setAttribute("mealList", UserMealsUtil.getMeals());
             request.getRequestDispatcher("/mealList.jsp").forward(request, response);
         }
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("meals", UserMealsUtil.getMeals());
+        request.setAttribute("mealList", UserMealsUtil.getMeals());
         request.getRequestDispatcher("/mealList.jsp").forward(request, response);
         //response.sendRedirect("mealList.jsp");
     }
