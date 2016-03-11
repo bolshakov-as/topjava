@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -16,7 +18,8 @@ import java.util.stream.Collectors;
  */
 public class UserMealsUtil {
 
-    static private Map<Integer,UserMeal> cache = new HashMap<>();
+    static private Map<Integer,UserMeal> cache = new ConcurrentHashMap<>();
+    static private AtomicInteger newId = new AtomicInteger(0);
 
     static{
         addMeal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500);
@@ -79,6 +82,7 @@ public class UserMealsUtil {
      */
     public static void addMeal(LocalDateTime dateTime, String description, int calories){
         UserMeal newMeal = new UserMeal(dateTime, description, calories);
+        newMeal.setId(newId.getAndIncrement());
         cache.put(newMeal.getId(), newMeal);
     }
 

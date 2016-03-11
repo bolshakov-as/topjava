@@ -17,9 +17,9 @@ public class UserMealWithExceed {
 
     protected final boolean exceed;
 
-    protected final int id;
+    protected final Integer id;
 
-    public UserMealWithExceed(LocalDateTime dateTime, String description, int calories, boolean exceed, int id) {
+    public UserMealWithExceed(LocalDateTime dateTime, String description, int calories, boolean exceed, Integer id) {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
@@ -54,7 +54,7 @@ public class UserMealWithExceed {
         return exceed;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

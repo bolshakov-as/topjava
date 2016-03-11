@@ -13,7 +13,7 @@
     <title>Edit meal</title>
 </head>
 <body>
-<jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.UserMeal"/>
+<jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.UserMeal"/>
 <form method="post" action="meals">
 <input type="hidden"  readonly name="id" value="${meal.id}" />
     <input type="datetime-local"  name="dateTime" value="${meal.dateTime}" />

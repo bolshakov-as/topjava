@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
+import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.util.UserMealsUtil;
 
 import javax.servlet.ServletException;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -22,19 +24,23 @@ public class MealServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        if(request.getParameterValues("but").length > 0 && request.getParameterValues("but")[0].equals("Delete")){
-            UserMealsUtil.deleteMeal(Integer.parseInt(request.getParameter("id")));
-            request.setAttribute("mealList", UserMealsUtil.getMeals());
-            request.getRequestDispatcher("/mealList.jsp").forward(request, response);
+        request.setCharacterEncoding("UTF-8");
+        String id = request.getParameter("id");
+        if(id == null || id.isEmpty()){
+            //ADD
+            UserMealsUtil.addMeal(LocalDateTime.parse(request.getParameter("dateTime"))
+                                    ,request.getParameter("description")
+                                    ,Integer.valueOf(request.getParameter("calories")));
         }
-        else if(request.getParameterValues("but").length > 0 && request.getParameterValues("but")[0].equals("Edit")){
-            request.setAttribute("meal", UserMealsUtil.getMealById(Integer.parseInt(request.getParameter("id"))));
-            request.getRequestDispatcher("/mealEdit.jsp").forward(request, response);
+        else {
+            //Edit
+            UserMeal userMeal = UserMealsUtil.getMealById(getId(request));
+            userMeal.setCalories(Integer.valueOf(request.getParameter("calories")));
+            userMeal.setDateTime(LocalDateTime.parse(request.getParameter("dateTime")));
+            userMeal.setDescription(request.getParameter("description"));
         }
-        else{
-            request.setAttribute("mealList", UserMealsUtil.getMeals());
-            request.getRequestDispatcher("/mealList.jsp").forward(request, response);
-        }
+
+        response.sendRedirect("meals");
 
     }
 
@@ -43,19 +49,25 @@ public class MealServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         if(action == null){
+            request.setAttribute("mealList", UserMealsUtil.getMeals());
+            request.getRequestDispatcher("/mealList.jsp").forward(request, response);
+        }
+        else if(action.equals("delete")){
+            UserMealsUtil.deleteMeal(getId(request));
+            LOG.debug("Delete");
+            request.setAttribute("mealList", UserMealsUtil.getMeals());
+            request.getRequestDispatcher("/mealList.jsp").forward(request, response);
         }
         else if(action.equals("edit")){
             LOG.debug("Edit");
-        }
-        else if(action.equals("delete")){
-            LOG.debug("Delete");
+            request.setAttribute("meal", UserMealsUtil.getMealById(getId(request)));
+            request.getRequestDispatcher("/mealEdit.jsp").forward(request, response);
         }
         else if(action.equals("add")){
             LOG.debug("ADD");
+            request.setAttribute("meal", new UserMeal(LocalDateTime.now(), "", 1000));
+            request.getRequestDispatcher("/mealEdit.jsp").forward(request, response);
         }
-
-        request.setAttribute("mealList", UserMealsUtil.getMeals());
-        request.getRequestDispatcher("/mealList.jsp").forward(request, response);
 
     }
 
