@@ -23,6 +23,29 @@
     <h3>Meal list</h3>
     <a href="meals?action=create">Add Meal</a>
     <hr>
+    <br>
+    <a href="meals?action=setUser&id=1">User 1</a>
+    <br>
+    <a href="meals?action=setUser&id=2">User 2</a>
+    <br>
+
+    <form method="post" action="meals" id="filter">
+        <table>
+            <tr>
+                <td>Time</td>
+                <td>from <input type="time" name="startTime" id="startTime"></td>
+                <td>to <input type="time" name="endTime" id="endTime"></td>
+            </tr>
+            <tr>
+                <td>Date</td>
+                <td>from <input type="date" name="startDate" id="startDate"></td>
+                <td>to <input type="date" name="endDate" id="endDate"></td>
+            </tr>
+        </table>
+        <input type="hidden" name="actionFilter" id="actionFilter" value="actionFilter">
+        <button type="submit">Filter</button>
+    </form>
+
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
