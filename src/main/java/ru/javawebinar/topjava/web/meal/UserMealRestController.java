@@ -22,30 +22,24 @@ public class UserMealRestController {
     @Autowired
     private UserMealService service;
 
-    LoggedUser user;
-
-    public void setUser(LoggedUser user) {
-        this.user = user;
-    }
-
     public void save(UserMeal userMeal){
-        service.save(userMeal, user.id());
+        service.save(userMeal, LoggedUser.id());
     }
 
     public void delete(int id){
-        service.delete(id, user.id());
+        service.delete(id, LoggedUser.id());
     }
 
     public UserMeal get(int id){
-        return service.get(id, user.id());
+        return service.get(id, LoggedUser.id());
     }
 
     public List<UserMealWithExceed> getAll(){
-        return UserMealsUtil.getWithExceeded(service.getAll(user.id()), user.getCaloriesPerDay());
+        return UserMealsUtil.getWithExceeded(service.getAll(LoggedUser.id()), LoggedUser.getCaloriesPerDay());
     }
 
     public List<UserMealWithExceed> getFiltered(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime){
-        return UserMealsUtil.getFilteredWithExceeded(service.getAll(user.id()),startDate, startTime, endDate, endTime, user.getCaloriesPerDay());
+        return UserMealsUtil.getFilteredWithExceeded(service.getAll(LoggedUser.id()),startDate, startTime, endDate, endTime, LoggedUser.getCaloriesPerDay());
     }
 
 }

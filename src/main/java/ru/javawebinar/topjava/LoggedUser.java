@@ -9,6 +9,7 @@ import ru.javawebinar.topjava.util.UserMealsUtil;
 public class LoggedUser {
 
     private static int id = 1;
+    private static LoggedUser user;
 
     public static int id() {
         return id;
@@ -20,6 +21,13 @@ public class LoggedUser {
 
     public static void setId(int id){
         LoggedUser.id = id;
+    }
+
+    public static LoggedUser getUser(){
+        if(user == null){
+            user = new LoggedUser();
+        }
+        return user;
     }
 
 }

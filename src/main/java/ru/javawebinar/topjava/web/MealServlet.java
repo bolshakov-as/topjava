@@ -37,7 +37,6 @@ public class MealServlet extends HttpServlet {
         super.init(config);
         appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         userMealRestController = appCtx.getBean(UserMealRestController.class);
-        userMealRestController.setUser(new LoggedUser());
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
