@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.sql.Timestamp;
@@ -64,7 +65,14 @@ public class JpaUserMealRepositoryImpl implements UserMealRepository {
 
     @Override
     public UserMeal get(int id, int userId) {
-        return em.createNamedQuery(UserMeal.GET, UserMeal.class).setParameter("id", id).setParameter("user_id", userId).getSingleResult();
+        UserMeal result = null;
+        Query query = em.createNamedQuery(UserMeal.GET, UserMeal.class).setParameter("id", id).setParameter("user_id", userId);
+        try {
+            result = (UserMeal) query.getSingleResult();
+        }catch (NoResultException e){
+            return null;
+        }
+        return result;
     }
 
     @Override

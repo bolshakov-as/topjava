@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
@@ -31,11 +32,12 @@ public class UserMeal extends BaseEntity {
     public static final String UPDATE     = "UserMeal.update";
 
     @Column(name = "date_time")
-    @NotEmpty
+    @NotNull
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
     private LocalDateTime dateTime;
 
     @Column(name = "description")
-    @NotEmpty
+    @NotNull
     private String description;
 
     @Column(name = "calories")
