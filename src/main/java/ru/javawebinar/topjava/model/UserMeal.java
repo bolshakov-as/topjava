@@ -30,6 +30,7 @@ public class UserMeal extends BaseEntity {
     public static final String GET_BETWEEN = "UserMeal.getBetween";
 
     @Column(name = "date_time", nullable = false)
+    @Convert(converter = LocalDateConverter.class)
     @NotNull
     private LocalDateTime dateTime;
 
