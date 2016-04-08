@@ -34,8 +34,8 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@ActiveProfiles({Profiles.POSTGRES, Profiles.DATAJPA})
-public class UserMealServiceTest {
+//@ActiveProfiles({Profiles.POSTGRES, Profiles.JDBC})
+public abstract class UserMealServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(UserMealServiceTest.class);;
 
     @Rule
@@ -58,45 +58,45 @@ public class UserMealServiceTest {
     @Autowired
     protected UserMealService service;
 
-    @Test
+//    @Test
     public void testDelete() throws Exception {
         service.delete(MealTestData.MEAL1_ID, USER_ID);
         MATCHER.assertCollectionEquals(Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2), service.getAll(USER_ID));
     }
 
-    @Test
+//    @Test
     public void testDeleteNotFound() throws Exception {
         thrown.expect(NotFoundException.class);
         service.delete(MEAL1_ID, 1);
     }
 
-    @Test
+//    @Test
     public void testSave() throws Exception {
         UserMeal created = getCreated();
         service.save(created, USER_ID);
         MATCHER.assertCollectionEquals(Arrays.asList(created, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1), service.getAll(USER_ID));
     }
 
-    @Test
+//    @Test
     public void testGet() throws Exception {
         UserMeal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
         MATCHER.assertEquals(ADMIN_MEAL, actual);
     }
 
-    @Test
+//    @Test
     public void testGetNotFound() throws Exception {
         thrown.expect(NotFoundException.class);
         service.get(MEAL1_ID, ADMIN_ID);
     }
 
-    @Test
+//    @Test
     public void testUpdate() throws Exception {
         UserMeal updated = getUpdated();
         service.update(updated, USER_ID);
         MATCHER.assertEquals(updated, service.get(MEAL1_ID, USER_ID));
     }
 
-    @Test
+//    @Test
     public void testNotFoundUpdate() throws Exception {
         UserMeal item = service.get(MEAL1_ID, USER_ID);
         thrown.expect(NotFoundException.class);
@@ -104,12 +104,12 @@ public class UserMealServiceTest {
         service.update(item, ADMIN_ID);
     }
 
-    @Test
+//    @Test
     public void testGetAll() throws Exception {
         MATCHER.assertCollectionEquals(USER_MEALS, service.getAll(USER_ID));
     }
 
-    @Test
+//    @Test
     public void testGetBetween() throws Exception {
         MATCHER.assertCollectionEquals(Arrays.asList(MEAL3, MEAL2, MEAL1),
                 service.getBetweenDates(LocalDate.of(2015, Month.MAY, 30), LocalDate.of(2015, Month.MAY, 30), USER_ID));
