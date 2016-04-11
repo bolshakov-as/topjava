@@ -10,5 +10,6 @@ public class Profiles {
             HSQLDB = "hsqldb",
             JDBC = "jdbc",
             JPA = "jpa",
-            DATAJPA="datajpa";
+            DATAJPA="datajpa",
+            CURRENT_DB = POSTGRES;
 }
