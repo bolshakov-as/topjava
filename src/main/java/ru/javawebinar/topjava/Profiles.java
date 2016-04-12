@@ -11,5 +11,6 @@ public class Profiles {
             JDBC = "jdbc",
             JPA = "jpa",
             DATAJPA="datajpa",
-            CURRENT_DB = POSTGRES;
+            CURRENT_DB = POSTGRES,
+            DB_IMPLEMENTATION = DATAJPA;
 }

@@ -2,6 +2,8 @@ package ru.javawebinar.topjava;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 import ru.javawebinar.topjava.to.UserMealWithExceed;
 import ru.javawebinar.topjava.web.meal.UserMealRestController;
@@ -21,7 +23,12 @@ import java.util.List;
 public class SpringMain {
     public static void main(String[] args) {
         // java 7 Automatic resource management
-        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml","spring/mock.xml")) {
+        try (GenericXmlApplicationContext appCtx = new GenericXmlApplicationContext()){
+
+            appCtx.getEnvironment().setActiveProfiles(Profiles.CURRENT_DB,Profiles.DB_IMPLEMENTATION);
+            appCtx.load("sprig/spring-app.xml", "sprig/spring-db.xml");
+            appCtx.refresh();
+
             System.out.println(Arrays.toString(appCtx.getBeanDefinitionNames()));
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
             System.out.println(adminUserController.create(UserTestData.USER));

@@ -31,6 +31,12 @@ public interface ProxyUserMealRepository extends JpaRepository<UserMeal, Integer
                         @Param("dateTime") LocalDateTime dateTime,
                         @Param("calories") int calories);
 
+
+    List<UserMeal> getBetween(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("userId") int userId);
+
+    @Query("SELECT um FROM UserMeal um JOIN FETCH um.user WHERE um.id = ?1 AND um.user.id = ?2")
+    UserMeal getWithUser(Integer id, Integer userId);
+
     @Query("SELECT DISTINCT m FROM UserMeal m WHERE m.id = ?1 AND m.user.id = ?2")
     UserMeal findOne(Integer id, Integer userId);
 

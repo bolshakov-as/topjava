@@ -34,4 +34,7 @@ public interface ProxyUserRepository extends JpaRepository<User, Integer> {
     List<User> findAll(Sort sort);
 
     User getByEmail(String email);
+
+    @Query("SELECT um FROM User um LEFT JOIN FETCH um.meals WHERE um.id = ?1")
+    User getWithMeals(Integer id);
 }

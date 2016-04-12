@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
 import ru.javawebinar.topjava.util.exception.ExceptionUtil;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -48,4 +49,11 @@ public class UserMealServiceImpl implements UserMealService {
     public UserMeal save(UserMeal meal, int userId) {
         return repository.save(meal, userId);
     }
+
+    @Override
+    public UserMeal getWithUser(int id, int userId) throws NotFoundException {
+        return repository.getWithUser(id, userId);
+    }
+
+
 }
