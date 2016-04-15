@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.repository.UserRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,6 +66,20 @@ public class JpaUserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> getAll() {
-        return em.createNamedQuery(User.ALL_SORTED, User.class).getResultList();
+
+        List<User> resQuery = em.createNamedQuery(User.ALL_SORTED, User.class).getResultList();
+
+        List<User> res = new ArrayList<>();
+        for (User user: resQuery){
+            int ind = res.indexOf(user);
+            if(ind == -1){
+                res.add(user);
+            }
+            else {
+                res.get(ind).getRoles().add(user.getRoles().iterator().next());
+            }
+        }
+
+        return res;
     }
 }
