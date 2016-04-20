@@ -29,12 +29,6 @@ public class RootController {
     @Autowired
     private UserService service;
 
-    @Autowired
-    private UserMealService mealService;
-
-    @Autowired
-    private UserMealRestController mealController;
-
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String root() {
         return "index";
@@ -53,79 +47,4 @@ public class RootController {
         return "redirect:meals";
     }
 
-    @RequestMapping(value = "/meals", method = RequestMethod.GET, params = {"id","action=delete"})
-    public String mealDelete(Model model,
-        @RequestParam(value = "id") int id) {
-        mealService.delete(id, LoggedUser.id());
-        return "redirect:meals";
-    }
-
-    @RequestMapping(value = "/meals", method = RequestMethod.GET, params = {"id","action=update"})
-    public String toFormUpdateMeal(Model model,
-                             @RequestParam(value = "id") int id) {
-        UserMeal meal = mealService.get(id, LoggedUser.id());
-        model.addAttribute("meal", meal);
-        return "mealEdit";
-    }
-
-    @RequestMapping(value = "/meals", method = RequestMethod.GET, params = "action=create")
-    public String toFormCreateMeal(Model model) {
-        UserMeal meal = new UserMeal();
-        meal.setDateTime(LocalDateTime.now());
-        model.addAttribute("meal", meal);
-        return "mealEdit";
-    }
-
-    @RequestMapping(value = "/meals", method = RequestMethod.GET)
-    public String mealList(Model model) {
-
-        model.addAttribute("mealList", UserMealsUtil.getWithExceeded(mealService.getAll(LoggedUser.id()),LoggedUser.getCaloriesPerDay()));
-        return "mealList";
-    }
-
-    @RequestMapping(value = "/meals", method = RequestMethod.POST, params = "action=filter")
-    public String mealFilter(Model model, HttpServletRequest request) {
-
-        LocalDate startDate = TimeUtil.parseLocalDate(resetParam("startDate", request));
-        LocalDate endDate = TimeUtil.parseLocalDate(resetParam("endDate", request));
-        LocalTime startTime = TimeUtil.parseLocalTime(resetParam("startTime", request));
-        LocalTime endTime = TimeUtil.parseLocalTime(resetParam("endTime", request));
-
-        model.addAttribute("mealList", mealController.getBetween(startDate, startTime, endDate, endTime));
-
-        return "mealList";
-    }
-
-    @RequestMapping(value = "/meals", method = RequestMethod.POST)
-    public String mealUpdate(HttpServletRequest request) {
-
-        String strMealId = request.getParameter("id");
-
-        UserMeal userMeal = null;
-        if(strMealId.isEmpty()){
-            userMeal = new UserMeal();
-        }
-        else{
-            userMeal = mealService.get(Integer.valueOf(strMealId), LoggedUser.id());
-        }
-
-        userMeal.setDateTime(LocalDateTime.parse(request.getParameter("dateTime")));
-        userMeal.setDescription(request.getParameter("description"));
-        userMeal.setCalories(Integer.valueOf(request.getParameter("calories")));
-
-        mealService.save(userMeal, LoggedUser.id());
-
-        return "redirect:meals";
-    }
-
-    private int getId(HttpServletRequest request) {
-        String paramId = Objects.requireNonNull(request.getParameter("id"), "parameter id  must not be null");
-        return Integer.valueOf(paramId);
-    }
-
-    private String resetParam(String param, HttpServletRequest request) {
-        String value = request.getParameter(param);
-        request.setAttribute(param, value);
-        return value;
-    }
 }
