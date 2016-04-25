@@ -12,7 +12,7 @@
     <%--http://stackoverflow.com/questions/10327390/how-should-i-get-root-folder-path-in-jsp-page--%>
     <h3><a href="${pageContext.request.contextPath}">Home</a></h3>
     <h3><fmt:message key="meals.title"/></h3>
-    <form method="post" action="meals/filter">
+    <form method="post" action="rest/meals/filter">
         <dl>
             <dt>From Date:</dt>
             <dd><input type="date" name="startDate" value="${startDate}"></dd>
