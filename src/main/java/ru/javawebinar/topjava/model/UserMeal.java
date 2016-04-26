@@ -32,11 +32,11 @@ public class UserMeal extends BaseEntity {
 
     @Column(name = "date_time", nullable = false)
     @NotNull
-    private LocalDateTime dateTime;
+    protected LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
     @NotEmpty
-    private String description;
+    protected String description;
 
     @Column(name = "calories", nullable = false)
     @Range(min = 10, max = 5000)
@@ -44,7 +44,7 @@ public class UserMeal extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    protected User user;
 
     public UserMeal() {
     }

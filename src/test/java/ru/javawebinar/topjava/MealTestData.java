@@ -3,6 +3,8 @@ package ru.javawebinar.topjava;
 import ru.javawebinar.topjava.TestUtil.ToStringModelMatcher;
 import ru.javawebinar.topjava.matcher.ModelMatcher;
 import ru.javawebinar.topjava.model.UserMeal;
+import ru.javawebinar.topjava.to.UserMealWithExceed;
+import ru.javawebinar.topjava.util.UserMealsUtil;
 
 import java.time.Month;
 import java.util.Arrays;
@@ -18,6 +20,7 @@ import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
 public class MealTestData {
 
     public static final ModelMatcher<UserMeal, String> MATCHER = new ToStringModelMatcher<>(UserMeal.class);
+    public static final ModelMatcher<UserMealWithExceed, String> MATCHER_EXCEED = new ToStringModelMatcher<>(UserMealWithExceed.class);
 
     public static final int MEAL1_ID = START_SEQ + 2;
     public static final int ADMIN_MEAL_ID = START_SEQ + 8;
@@ -40,4 +43,21 @@ public class MealTestData {
     public static UserMeal getUpdated() {
         return new UserMeal(MEAL1_ID, MEAL1.getDateTime(), "Обновленный завтрак", 200);
     }
+
+    public static class UserMealTest extends UserMeal{
+
+        public UserMealTest(UserMeal um) {
+            super(um.getId(), um.getDateTime(), um.getDescription(), um.getCalories());
+        }
+
+        public UserMealTest(UserMealWithExceed um) {
+            super(um.getId(), um.getDateTime(), um.getDescription(), um.getCalories());
+        }
+
+    }
+
+    public static String convertUserMealWithExceed(Object ume){
+        return ume.toString();
+    }
+
 }
