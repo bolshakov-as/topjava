@@ -18,22 +18,22 @@
                 <h3><a href="${pageContext.request.contextPath}">Home</a></h3>
                 <h3><fmt:message key="meals.title"/></h3>
                 <div class="view-box">
-                    <form method="post" action="meals/filter">
+                    <form method="post" action="meals" id="getFilterMeals">
                         <dl>
                             <dt>From Date:</dt>
-                            <dd><input type="date" name="startDate" value="${startDate}"></dd>
+                            <dd><input type="date" name="startDate" id="startDate" value="${startDate}"></dd>
                         </dl>
                         <dl>
                             <dt>To Date:</dt>
-                            <dd><input type="date" name="endDate" value="${endDate}"></dd>
+                            <dd><input type="date" name="endDate" id="endDate" value="${endDate}"></dd>
                         </dl>
                         <dl>
                             <dt>From Time:</dt>
-                            <dd><input type="time" name="startTime" value="${startTime}"></dd>
+                            <dd><input type="time" name="startTime" id="startTime" value="${startTime}"></dd>
                         </dl>
                         <dl>
                             <dt>To Time:</dt>
-                            <dd><input type="time" name="endTime" value="${endTime}"></dd>
+                            <dd><input type="time" name="endTime" id="endTime" value="${endTime}"></dd>
                         </dl>
                         <button type="submit">Filter</button>
                     </form>
@@ -134,6 +134,12 @@
 
     var ajaxUrl = 'ajax/profile/meals/';
     var datatableApi;
+
+    var startDate = "";
+    var endDate = "";
+    var startTime = "";
+    var endTime = "";
+
 
     // $(document).ready(function () {
     $(function () {

@@ -8,6 +8,22 @@ function makeEditable() {
         deleteRow($(this).attr("id"));
     });
 
+    $('.enabled').click(function() {
+        if (this.checked == false)
+        {
+            disableUser($(this).attr("id"));
+        }
+        else{
+            enableUser($(this).attr("id"));
+       }
+    });
+
+    $('#getFilterMeals').submit(function(){
+        setVarFilter();
+        updateTable();
+        return false;
+    });
+
     $('#detailsForm').submit(function () {
         save();
         return false;
@@ -17,6 +33,8 @@ function makeEditable() {
         failNoty(event, jqXHR, options, jsExc);
     });
 }
+
+
 
 function deleteRow(id) {
     $.ajax({
@@ -29,14 +47,64 @@ function deleteRow(id) {
     });
 }
 
-function updateTable() {
-    $.get(ajaxUrl, function (data) {
-        datatableApi.fnClearTable();
-        $.each(data, function (key, item) {
-            datatableApi.fnAddData(item);
-        });
-        datatableApi.fnDraw();
+function enableUser(id) {
+    $.ajax({
+        url: ajaxUrl + "enable/" + id,
+        type: 'POST',
+        success: function () {
+            successNoty('enable user');
+        }
     });
+}
+
+function disableUser(id) {
+    $.ajax({
+        url: ajaxUrl + "disable/" + id,
+        type: 'POST',
+        success: function () {
+            successNoty('disable user');
+        }
+    });
+}
+
+function setVarFilter(){
+    startDate = document.getElementById("startDate").value;
+    endDate   = document.getElementById("endDate").value;
+    startTime = document.getElementById("startTime").value;
+    endTime = document.getElementById("endTime").value;
+}
+
+function updateTable() {
+
+    var needFilter = startDate != "" || endDate != "" || startTime != "" || endTime != "";
+
+    if(needFilter){
+        var vurUrl = ajaxUrl + "filter";
+        $.get(vurUrl,
+            {
+                'startDate': startDate,
+                'endDate': endDate,
+                'startTime': startTime,
+                'endTime': endTime
+            },
+            function (data) {
+            datatableApi.fnClearTable();
+            $.each(data, function (key, item) {
+                datatableApi.fnAddData(item);
+            });
+            datatableApi.fnDraw();
+        });
+    }
+    else
+    {
+        $.get(ajaxUrl, function (data) {
+            datatableApi.fnClearTable();
+            $.each(data, function (key, item) {
+                datatableApi.fnAddData(item);
+            });
+            datatableApi.fnDraw();
+        });
+    }
 }
 
 function save() {
