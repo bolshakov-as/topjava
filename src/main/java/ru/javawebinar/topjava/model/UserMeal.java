@@ -92,6 +92,9 @@ public class UserMeal extends BaseEntity {
         this.user = user;
     }
 
+
+
+
     @Override
     public String toString() {
         return "UserMeal{" +
