@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
+import ru.javawebinar.topjava.util.exception.ErrorInfo;
 import ru.javawebinar.topjava.web.ExceptionInfoHandler;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import java.util.List;
 
 /**
@@ -36,13 +38,32 @@ public class AdminAjaxController extends AbstractUserController implements Excep
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> createOrUpdate(@Valid UserTo userTo, BindingResult result) {
+    public ResponseEntity<ErrorInfo> createOrUpdate(@Valid UserTo userTo, BindingResult result) {
         if (result.hasErrors()) {
+
             // TODO change to exception handler
             StringBuilder sb = new StringBuilder();
             result.getFieldErrors().forEach(fe -> sb.append(fe.getField()).append(" ").append(fe.getDefaultMessage()).append("<br>"));
-            return new ResponseEntity<>(sb.toString(), HttpStatus.UNPROCESSABLE_ENTITY);
+            Throwable ex = new ValidationException(sb.toString());
+            ErrorInfo errorInfo = new ErrorInfo("", ex);
+
+            return new ResponseEntity<>(errorInfo, HttpStatus.UNPROCESSABLE_ENTITY);
         }
+
+        try {
+
+
+        User userByEmail = super.getByMail(userTo.getEmail());
+        if(userByEmail != null && userByEmail.getId() != userTo.getId()){
+            Throwable ex = new ValidationException("User with this email already present in application.");
+            ErrorInfo errorInfo = new ErrorInfo("", ex);
+            return new ResponseEntity<>(errorInfo, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        }
+        catch (Exception ex){
+
+        }
+
         if (userTo.getId() == 0) {
             super.create(UserUtil.createFromTo(userTo));
         } else {
