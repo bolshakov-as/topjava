@@ -2,13 +2,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
-        <div class="navbar-header navbar-brand"><fmt:message key="app.title"/></div>
+        <div class="navbar-header navbar-brand"><fmt:message key="app.title"/>
+            <spring:message code="app.title" text="Test test"/>
+        </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li><form:form class="navbar-form navbar-right" role="form" action="spring_security_check"
@@ -24,7 +27,7 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        en
+                        ${pageContext.response.locale}
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
